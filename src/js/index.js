@@ -1,5 +1,5 @@
 import Search from './model/Search'
-import {element} from './view/base'
+import {element, createLoader, clearLoader} from './view/base'
 import * as searchView from './view/searchView'
 
 // Web app states:
@@ -19,8 +19,10 @@ const controlSearch = async () => {
         // 3. to prepare window UI for search
         searchView.clearSearchInput();
         searchView.clearSearchResult();
+        createLoader(element.searchResultDiv);
         // 4. to execute search
         await state.search.doSearch();
+        clearLoader();
         // 5. to show search result on window
         if (state.search.result === undefined) alert('Хайлтанд илэрц байхгүй байна ...');
         else searchView.renderRecipes(state.search.result);
