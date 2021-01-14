@@ -2,6 +2,7 @@ import Search from './model/Search';
 import Recipe from './model/Recipe';
 import {element, createLoader, clearLoader} from './view/base';
 import * as searchView from './view/searchView';
+import { renderRecipe, clearRecipe } from './view/recipeView';
 
 // Web app states:
 //  - Search query and result
@@ -61,6 +62,8 @@ const controlRecipe = async () =>{
     state.recipe = new Recipe(id);
 
     // 3. to prepare UI 
+    clearRecipe();
+    createLoader(element.recipeDiv);
 
     // 4. to get Recipe
     await state.recipe.getRecipe();
@@ -70,6 +73,7 @@ const controlRecipe = async () =>{
     state.recipe.calcPortion();
 
     // 6. to render Recipe
-    console.log(state.recipe);
+    renderRecipe(state.recipe);
 }
 window.addEventListener('hashchange', controlRecipe);
+window.addEventListener('load', controlRecipe);
