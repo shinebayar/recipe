@@ -20,14 +20,51 @@ const renderRecipe = recipe => {
     element.searchResultList.insertAdjacentHTML("beforeend", markup);
 };
 
-export const clearSearchInput = () =>{
+export const clearSearchInput = () => {
     element.searchInput.value = '';
 }
-export const clearSearchResult = () =>{
+
+export const clearSearchResult = () => {
     element.searchResultList.innerHTML = '';
+    element.pageButtons.innerHTML = '';
 }
+
 export const getInput = () => element.searchInput.value;
-export const renderRecipes = recipes => {
-    // recipes.forEach(el => renderRecipe(el));
-    recipes.forEach(renderRecipe);
+
+// type ===> next, prev
+// direction ===> left, right
+const createPageBtn = (page, type, direction) => `
+    <button class="btn-inline results__btn--${type}" data-goto="${page}">
+        <span>Хуудас ${page}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${direction}"></use>
+        </svg>
+    </button>
+`;
+
+const renderPagination = (currentPage, totalPages) => {
+    let btnHTML;
+    if(currentPage === 1 && totalPages > 1){
+        // It is on first page, then show next page
+        btnHTML = createPageBtn(2, 'next', 'right');
+    }else if(currentPage < totalPages  ){
+        // It is on middle page, then show next and previos pages
+        btnHTML = createPageBtn(currentPage-1, 'prev', 'left');
+        btnHTML += createPageBtn(currentPage+1, 'next', 'right');
+    }else if(currentPage === totalPages){
+        // It is on last page, then show previos page
+        btnHTML = createPageBtn(currentPage-1, 'prev', 'left');
+    }
+    element.pageButtons.insertAdjacentHTML('afterbegin', btnHTML);
+}
+
+export const renderRecipes = (recipes, currentPage=1, resPerPage=10) => {
+    // 1. render result for per page
+    const start = (currentPage -1) * resPerPage;
+    const end = currentPage * resPerPage;
+    recipes.slice(start, end).forEach(renderRecipe);
+
+    // 2. show pagination
+    const totalPages = Math.ceil(recipes.length / resPerPage);
+    renderPagination(currentPage, totalPages);
 }
