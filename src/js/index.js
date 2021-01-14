@@ -1,6 +1,7 @@
-import Search from './model/Search'
-import {element, createLoader, clearLoader} from './view/base'
-import * as searchView from './view/searchView'
+import Search from './model/Search';
+import Recipe from './model/Recipe';
+import {element, createLoader, clearLoader} from './view/base';
+import * as searchView from './view/searchView';
 
 // Web app states:
 //  - Search query and result
@@ -43,3 +44,6 @@ element.pageButtons.addEventListener('click', e => {
         searchView.renderRecipes(state.search.result, parseInt(btn.dataset.goto, 10));
     }
 });
+
+const example = new Recipe(47746);
+example.getRecipe();
