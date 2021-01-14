@@ -2,7 +2,7 @@ import Search from './model/Search';
 import Recipe from './model/Recipe';
 import {element, createLoader, clearLoader} from './view/base';
 import * as searchView from './view/searchView';
-import { renderRecipe, clearRecipe } from './view/recipeView';
+import { renderRecipe, clearRecipe, highlightClickedRecipe } from './view/recipeView';
 
 // Web app states:
 //  - Search query and result
@@ -64,6 +64,7 @@ const controlRecipe = async () =>{
     // 3. to prepare UI 
     clearRecipe();
     createLoader(element.recipeDiv);
+    highlightClickedRecipe(id);
 
     // 4. to get Recipe
     await state.recipe.getRecipe();

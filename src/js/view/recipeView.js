@@ -1,5 +1,13 @@
 import { element } from './base';
 
+export const highlightClickedRecipe = id =>{
+    let arr = Array.from(document.querySelectorAll('.results__link'));
+    arr.forEach(el=>el.classList.remove('results__link--active'));
+
+    let selectAtagHref = document.querySelector(`a[href*="${id}"]`);
+    if(selectAtagHref) selectAtagHref.classList.add('results__link--active');
+}
+
 export const clearRecipe = () =>{
     element.recipeDiv.innerHTML = '';
 }
