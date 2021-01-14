@@ -24,7 +24,14 @@ export default class Recipe{
         this.social_rank = result.data.recipe.social_rank;
         this.source_url = result.data.recipe.source_url;
         this.title = result.data.recipe.title;
-        console.log(this.title);
+    }
+
+    calcTime(){
+        this.time = this.ingredients * 5;
+    }
+
+    calcPortion(){
+        this.portion = 4;
     }
     
 }
