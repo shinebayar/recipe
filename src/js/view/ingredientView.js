@@ -2,12 +2,8 @@ import { element } from './base';
 
 export const renderIngredient = perIngredient =>{
     let html = `
-        <li class="shopping__item">
-            <div class="shopping__count">
-                <input type="number" value="500" step="100">
-                <p>g</p>
-            </div>
-            <p class="shopping__description">${perIngredient}</p>
+        <li class="shopping__item" data-itemID="${perIngredient.id}">
+            <p class="shopping__description">${perIngredient.item}</p>
             <button class="shopping__delete btn-tiny">
                 <svg>
                     <use href="img/icons.svg#icon-circle-with-cross"></use>
@@ -20,4 +16,9 @@ export const renderIngredient = perIngredient =>{
 
 export const clearIngredient = () =>{
     element.shoppingList.innerHTML = '';
+}
+
+export const deleteIngredient = id =>{
+    const item = document.querySelector(`[data-itemid=${id}]`);
+    item.parentElement.removeChild(item);
 }

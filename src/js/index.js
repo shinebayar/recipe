@@ -89,6 +89,7 @@ const controlRecipe = async () =>{
 const controlIngredient = () =>{
     // 1. to create object of Ingredient model
     state.ingredient = new Ingredient;
+    // window.abc = state.ingredient; // used for testing for temporary
 
     // to clear previos selected ingredients
     ingredientView.clearIngredient();
@@ -96,12 +97,18 @@ const controlIngredient = () =>{
     // 2. to save ingredients to object of Ingredient model
     state.recipe.ingredients.forEach(el => {
         // 2.1. to insert ingredients into model
-        state.ingredient.addIngredients(el);
+        const ingredient = state.ingredient.addIngredients(el);
 
         // 2.2. to render ingredients
-        ingredientView.renderIngredient(el);
+        ingredientView.renderIngredient(ingredient);
     });
 }
 element.recipeDiv.addEventListener('click', e =>{
     if( e.target.matches('.recipe__btn, .recipe__btn *') ) controlIngredient();
+});
+element.shoppingList.addEventListener('click', e =>{
+    const id = e.target.closest('.shopping__item').dataset.itemid;
+    state.ingredient.deleteIngredient(id);
+    ingredientView.deleteIngredient(id);
+    // console.log(id);
 });
