@@ -1,6 +1,7 @@
 import Search from './model/Search';
 import Recipe from './model/Recipe';
 import Ingredient from './model/Ingredient';
+import Like from './model/like'
 import {element, createLoader, clearLoader} from './view/base';
 import * as searchView from './view/searchView';
 import { renderRecipe, clearRecipe, highlightClickedRecipe } from './view/recipeView';
@@ -104,11 +105,34 @@ const controlIngredient = () =>{
     });
 }
 element.recipeDiv.addEventListener('click', e =>{
-    if( e.target.matches('.recipe__btn, .recipe__btn *') ) controlIngredient();
+    if( e.target.matches('.recipe__btn, .recipe__btn *') ) { controlIngredient(); }
+    else if( e.target.matches('.recipe__love, .recipe__love *') ){
+        controlLike();
+    }
 });
 element.shoppingList.addEventListener('click', e =>{
     const id = e.target.closest('.shopping__item').dataset.itemid;
     state.ingredient.deleteIngredient(id);
     ingredientView.deleteIngredient(id);
-    // console.log(id);
 });
+
+/* CONTROLLER LIKE */
+const controlLike = () =>{
+    // to create model of like 
+    if( state.likes === undefined ) state.likes = new Like();
+
+    // to find recipe id
+    const recipeID = state.recipe.id;
+    
+    // check that recipe is liked
+    if( state.likes.isLiked(recipeID) ){
+        state.likes.deleteLike(recipeID);
+        console.log('unliked');
+    }else{
+        state.likes.addLike(recipeID, state.recipe.title, state.recipe.publisher, state.recipe.image_url);
+        console.log('liked');
+    }
+    console.log(state.likes);
+
+    // 
+}
