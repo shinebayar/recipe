@@ -1,11 +1,12 @@
 import Search from './model/Search';
 import Recipe from './model/Recipe';
 import Ingredient from './model/Ingredient';
-import Like from './model/like'
+import Like from './model/Like'
 import {element, createLoader, clearLoader} from './view/base';
 import * as searchView from './view/searchView';
 import { renderRecipe, clearRecipe, highlightClickedRecipe } from './view/recipeView';
 import * as ingredientView from './view/ingredientView';
+import * as likeView from './view/likeView';
 
 // Web app states:
 //  - Search query and result
@@ -14,6 +15,7 @@ import * as ingredientView from './view/ingredientView';
 //  - Reserving ingredients of recipe
 
 const state = {};
+likeView.toggleLikeMenu(0);
 
 /* SEARCH CONTROLLER */
 const controlSearch = async () => {
@@ -60,6 +62,7 @@ element.pageButtons.addEventListener('click', e => {
 const controlRecipe = async () =>{
     // 1. to split ID from URL
     const id = window.location.hash.replace('#', '');
+    if( state.likes === undefined ) state.likes = new Like();
 
     if(id){
         // 2. to create model of Recipe
@@ -78,7 +81,7 @@ const controlRecipe = async () =>{
         state.recipe.calcPortion();
     
         // 6. to render Recipe
-        renderRecipe(state.recipe);
+        renderRecipe(state.recipe, state.likes.isLiked(id));
     }
 }
 // window.addEventListener('hashchange', controlRecipe);
@@ -118,8 +121,7 @@ element.shoppingList.addEventListener('click', e =>{
 
 /* CONTROLLER LIKE */
 const controlLike = () =>{
-    // to create model of like 
-    if( state.likes === undefined ) state.likes = new Like();
+    // created model of like and declared at recipeControl
 
     // to find recipe id
     const recipeID = state.recipe.id;
@@ -127,12 +129,14 @@ const controlLike = () =>{
     // check that recipe is liked
     if( state.likes.isLiked(recipeID) ){
         state.likes.deleteLike(recipeID);
-        console.log('unliked');
+        likeView.toggleLikeIcon(false);
+        likeView.unrenderLike(recipeID);
     }else{
-        state.likes.addLike(recipeID, state.recipe.title, state.recipe.publisher, state.recipe.image_url);
-        console.log('liked');
+        const newLike = state.likes.addLike(recipeID, state.recipe.title, state.recipe.publisher, state.recipe.image_url);
+        likeView.renderLike(newLike);
+        likeView.toggleLikeIcon(true);
     }
-    console.log(state.likes);
 
-    // 
+    // hide or visible LikeMenu
+    likeView.toggleLikeMenu(state.likes.getNumberOfLikes());
 }

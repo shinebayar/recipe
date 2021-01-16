@@ -17,4 +17,8 @@ export default class Like{
         const foundIndex = this.likes.findIndex(el=> el.id === id);
         this.likes.splice(foundIndex,1);
     }
+
+    getNumberOfLikes(){
+        return this.likes.length;
+    }
 }
