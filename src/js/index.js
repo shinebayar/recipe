@@ -15,7 +15,6 @@ import * as likeView from './view/likeView';
 //  - Reserving ingredients of recipe
 
 const state = {};
-likeView.toggleLikeMenu(0);
 
 /* SEARCH CONTROLLER */
 const controlSearch = async () => {
@@ -62,7 +61,6 @@ element.pageButtons.addEventListener('click', e => {
 const controlRecipe = async () =>{
     // 1. to split ID from URL
     const id = window.location.hash.replace('#', '');
-    if( state.likes === undefined ) state.likes = new Like();
 
     if(id){
         // 2. to create model of Recipe
@@ -87,6 +85,17 @@ const controlRecipe = async () =>{
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
 ['hashchange', 'load'].forEach(e => window.addEventListener(e, controlRecipe));
+
+window.addEventListener('load', e => {
+    // create a model of liked ingredients when page is loaded
+    if( state.likes === undefined ) state.likes = new Like();
+
+    // to show like menu if there is a liked recipe
+    likeView.toggleLikeMenu(state.likes.getNumberOfLikes());
+
+    // to show liked list
+    state.likes.likes.forEach(like => likeView.renderLike(like));
+});
 
 
 /* INGREDIENT CONTROLLER */

@@ -29,5 +29,4 @@ export const renderLike = newLike =>{
 export const unrenderLike = id =>{
     const el = document.querySelector(`.likes__link[href*="${id}"]`).parentElement;
     el.parentElement.removeChild(el);
-    console.log(el);        
 }
